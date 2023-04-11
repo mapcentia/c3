@@ -37,7 +37,21 @@ module.exports = {
             e.geoJSON.features.forEach(f => {
                 const properties = f.properties;
                 const coordinates = f.geometry.coordinates;
-                const id = `alert-toast-${properties.id}`
+                const id = `alert-toast-${properties.id}`;
+                let bgColor;
+                switch (properties.type) {
+                    case "ABA":
+                        bgColor = "danger";
+                        break;
+                    case "Elevator":
+                        bgColor = "warning";
+                        break;
+                    case "Tyveri":
+                        bgColor = "primary";
+                        break;
+                    default:
+                        bgColor = "light";
+                }
                 if (properties.status !== "closed") {
                     /*
                     if (document.getElementById(id)) {
@@ -51,14 +65,24 @@ module.exports = {
                     divElement.setAttribute("id", id);
                     divElement.classList.add("toast");
                     divElement.innerHTML = `
-            <div class="toast-header text-bg-danger border-0"">
-            <strong class="me-auto">${properties.address}</strong>
+            <div class="toast-header text-bg-${bgColor} border-0"">
+            <strong class="me-auto">${properties.type}</strong>
             <small>${properties.time}</small>
             </div>
             <div class="toast-body">
-            <button class="btn btn-outline-secondary show-alarm">Vis</button>
-            <button class="btn btn-outline-success acknowledge-alarm" ${properties.status === "acknowledged" ? "disabled" : ""}><span class="spinner-border spinner-border-sm d-none"></span>Kvittere</button>
-            <button class="btn btn-outline-danger close-alarm ${properties.status === "acknowledged" && properties.status !== "close" ? "" : "invisible"}"><span class="spinner-border spinner-border-sm d-none"></span>Luk</button>
+                <div class="d-flex flex-column">
+                    <div class="d-flex gap-2">
+                        <div><strong>${properties.placename}</strong></div>
+                        <div>${properties.address}</div>
+                    </div>
+                    <div>${properties.incidenttype}</div>
+                    <div>Zone number ${properties.zonenumber}</div>
+                </div>
+                <div class="mt-2">
+                    <button class="btn btn-outline-secondary show-alarm">Vis</button>
+                    <button class="btn btn-outline-success acknowledge-alarm ${properties.status === "acknowledged" ? "d-none" : ""}"><span class="spinner-border spinner-border-sm d-none"></span>Kvitteret</button>
+                    <button class="btn btn-outline-danger close-alarm ${properties.status === "acknowledged" && properties.status !== "close" ? "" : "d-none"}"><span class="spinner-border spinner-border-sm d-none"></span>Afslut</button>
+                </div>
             </div>
             `;
                     alertToastEl.appendChild(divElement)
@@ -88,8 +112,8 @@ module.exports = {
                             .then(response => {
                                 if (response.ok) {
                                     console.log("Data updated successfully.");
-                                    b.target.querySelector(".acknowledge-alarm span").classList.add("d-none");
-                                    document.querySelector(".close-alarm").classList.remove("invisible");
+                                    b.target.classList.add("d-none");
+                                    b.target.parentElement.querySelector(`.close-alarm`).classList.remove("d-none");
                                 } else {
                                     alert("Kunne ikke opdatere alarm!");
                                     b.target.removeAttribute("disabled");

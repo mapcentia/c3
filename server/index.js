@@ -25,7 +25,6 @@ router.put('/api/c3/', (req, res) => {
             if (response.ok) {
                 console.log("Data updated successfully.");
                 res.send({"success": true});
-
             } else {
                 res.send("Kunne ikke opdatere alarm!");
             }
@@ -34,7 +33,5 @@ router.put('/api/c3/', (req, res) => {
             console.log(error)
             res.send("Kunne ikke opdatere alarm!sddd");
         });
-
-
 });
 module.exports = router;
