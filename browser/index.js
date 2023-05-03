@@ -35,21 +35,23 @@ module.exports = {
             const alertToastEl = document.getElementById("alarm-toast");
             alertToastEl.innerHTML = "";
             alertToastEl.style.overflow = "scroll";
-            alertToastEl.style.height = "100%";
+            alertToastEl.style.height = "calc(100vh - 55px)";
             alertToastEl.style.pointerEvents = "auto";
             e.geoJSON.features.forEach(f => {
                 const properties = f.properties;
                 const coordinates = f.geometry.coordinates;
                 const id = `alert-toast-${properties.id}`;
                 let bgColor;
-                switch (properties.type) {
-                    case "ABA":
+                let text;
+                switch (properties.incidenttype) {
+                    case "BRAND":
                         bgColor = "danger";
+
                         break;
-                    case "Elevator":
+                    case "ELEVATOR":
                         bgColor = "warning";
                         break;
-                    case "Tyveri":
+                    case "TYVERI":
                         bgColor = "primary";
                         break;
                     default:
@@ -69,7 +71,7 @@ module.exports = {
                     divElement.classList.add("toast");
                     divElement.innerHTML = `
             <div class="toast-header text-bg-${bgColor} border-0"">
-            <strong class="me-auto">${properties.type}</strong>
+            <strong class="me-auto">${properties.incidenttype}</strong>
             <small>${properties.time}</small>
             </div>
             <div class="toast-body">

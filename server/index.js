@@ -23,15 +23,14 @@ router.put('/api/c3/', (req, res) => {
         .then(response => {
             res.header('content-type', 'application/json');
             if (response.ok) {
-                console.log("Data updated successfully.");
                 res.send({"success": true});
             } else {
-                res.send("Kunne ikke opdatere alarm!");
+                res.status(response.status).send({"success": false});
             }
         })
         .catch(error => {
             console.log(error)
-            res.send("Kunne ikke opdatere alarm!sddd");
+            res.send("Kunne ikke opdatere alarm!");
         });
 });
 module.exports = router;
