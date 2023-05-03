@@ -170,6 +170,7 @@ module.exports = {
                                 b.target.querySelector("span").classList.add("d-none");
                             });
                     })
+                    alertToastEl.scrollTop = alertToastEl.scrollHeight;
                 }
             })
         }
