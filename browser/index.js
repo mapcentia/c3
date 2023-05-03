@@ -28,12 +28,15 @@ module.exports = {
     init: function () {
         const toastContainer = document.createElement("div");
         toastContainer.setAttribute("id", "alarm-toast")
-        toastContainer.classList.add("toast-container", "position-fixed", "bottom-0", "end-0", "p-3", "pb-5");
+        toastContainer.classList.add("toast-container", "position-fixed", "bottom-0", "end-0", "me-5", "pb-5");
         document.getElementById("main-container").append(toastContainer);
         window._c3 = (e) => {
             const m = cloud.get().map;
             const alertToastEl = document.getElementById("alarm-toast");
             alertToastEl.innerHTML = "";
+            alertToastEl.style.overflow = "scroll";
+            alertToastEl.style.height = "100%";
+            alertToastEl.style.pointerEvents = "auto";
             e.geoJSON.features.forEach(f => {
                 const properties = f.properties;
                 const coordinates = f.geometry.coordinates;
