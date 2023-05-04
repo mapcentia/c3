@@ -34,9 +34,12 @@ module.exports = {
             const m = cloud.get().map;
             const alertToastEl = document.getElementById("alarm-toast");
             alertToastEl.innerHTML = "";
-            alertToastEl.style.overflow = "scroll";
+            alertToastEl.style.overflow = "auto";
             alertToastEl.style.height = "calc(100vh - 55px)";
             alertToastEl.style.pointerEvents = "auto";
+            alertToastEl.style.display = "flex";
+            alertToastEl.style.flexDirection = "column";
+            let first = true;
             e.geoJSON.features.forEach(f => {
                 const properties = f.properties;
                 const coordinates = f.geometry.coordinates;
@@ -46,7 +49,6 @@ module.exports = {
                 switch (properties.incidenttype) {
                     case "BRAND":
                         bgColor = "danger";
-
                         break;
                     case "ELEVATOR":
                         bgColor = "warning";
@@ -69,6 +71,10 @@ module.exports = {
                     let divElement = document.createElement("div");
                     divElement.setAttribute("id", id);
                     divElement.classList.add("toast");
+                    if (first) {
+                        divElement.style.marginTop = "auto";
+                    }
+                    first = false;
                     divElement.innerHTML = `
             <div class="toast-header text-bg-${bgColor} border-0"">
             <strong class="me-auto">${properties.incidenttype}</strong>
