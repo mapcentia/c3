@@ -46,7 +46,7 @@ module.exports = {
                 const id = `alert-toast-${properties.id}`;
                 let bgColor;
                 let text;
-                switch (properties.incidenttype) {
+                switch (properties.type) {
                     case "BRAND":
                         bgColor = "danger";
                         break;
@@ -77,7 +77,7 @@ module.exports = {
                     first = false;
                     divElement.innerHTML = `
             <div class="toast-header text-bg-${bgColor} border-0"">
-            <strong class="me-auto">${properties.incidenttype}</strong>
+            <strong class="me-auto">${properties.type}</strong>
             <small>${properties.time}</small>
             </div>
             <div class="toast-body">
