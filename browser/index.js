@@ -7,6 +7,7 @@
 'use strict';
 
 let cloud;
+let mapControls;
 const config = require('../../../config/config.js');
 const customer = config?.extensionConfig?.c3?.customer
 
@@ -19,6 +20,7 @@ module.exports = {
      */
     set: function (o) {
         cloud = o.cloud;
+        mapControls = o.mapcontrols;
         return this;
     },
 
@@ -28,7 +30,7 @@ module.exports = {
     init: function () {
         const toastContainer = document.createElement("div");
         toastContainer.setAttribute("id", "alarm-toast")
-        toastContainer.classList.add("toast-container", "position-fixed", "bottom-0", "end-0", "me-5", "pb-5");
+        toastContainer.classList.add("toast-container", "position-fixed", "top-5", "end-0", "me-5", "pb-5");
         document.getElementById("main-container").append(toastContainer);
         window._c3 = (e) => {
             const m = cloud.get().map;
@@ -40,6 +42,7 @@ module.exports = {
             alertToastEl.style.display = "flex";
             alertToastEl.style.flexDirection = "column";
             let first = true;
+            let latestCoords = null;
             e.geoJSON.features.forEach(f => {
                 const properties = f.properties;
                 const coordinates = f.geometry.coordinates;
@@ -72,7 +75,8 @@ module.exports = {
                     divElement.setAttribute("id", id);
                     divElement.classList.add("toast");
                     if (first) {
-                        divElement.style.marginTop = "auto";
+                        latestCoords = coordinates;
+                        // divElement.style.marginTop = "auto";
                     }
                     first = false;
                     divElement.innerHTML = `
@@ -162,6 +166,7 @@ module.exports = {
                                     b.target.querySelector("span").classList.add("d-none");
                                     document.getElementById(id).remove();
                                     //t.hide();
+                                    mapControls.setDefaultZoomCenter();
                                 } else {
                                     alert("Kunne ikke opdatere alarm!");
                                     b.target.removeAttribute("disabled");
@@ -179,6 +184,9 @@ module.exports = {
                     alertToastEl.scrollTop = alertToastEl.scrollHeight;
                 }
             })
+            if (latestCoords) {
+                m.setView([latestCoords[1], latestCoords[0]], 17);
+            }
         }
 
     }
