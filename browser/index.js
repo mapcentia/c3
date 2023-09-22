@@ -47,6 +47,7 @@ module.exports = {
                 const properties = f.properties;
                 const coordinates = f.geometry.coordinates;
                 const id = `alert-toast-${properties.id}`;
+                let time = new Date(properties.time + 'z').toLocaleString();
                 let bgColor;
                 let text;
                 switch (properties.type) {
@@ -82,7 +83,7 @@ module.exports = {
                     divElement.innerHTML = `
             <div class="toast-header text-bg-${bgColor} border-0"">
             <strong class="me-auto">${properties.type}</strong>
-            <small>${properties.time}</small>
+            <small>${time}</small>
             </div>
             <div class="toast-body">
                 <div class="d-flex flex-column">
